@@ -1,18 +1,18 @@
 <template>
   <div id="app">
     <div class="lock-container">
-    <h2>Pattern Lock Screen</h2>
-    <canvas
-      ref="patternCanvas"
-      width="300"
-      height="300"
-      @mousedown="startPattern"
-      @mousemove="drawPattern"
-      @mouseup="endPattern"
-      @mouseleave="endPattern"
-    ></canvas>
-    <p>{{ message }}</p>
-  </div>
+      <h2>Pattern Lock Screen</h2>
+      <canvas
+        ref="patternCanvas"
+        width="300"
+        height="300"
+        @mousedown="startPattern"
+        @mousemove="drawPattern"
+        @mouseup="endPattern"
+        @mouseleave="endPattern"
+      ></canvas>
+      <p>{{ message }}</p>
+    </div>
   </div>
 </template>
 
@@ -39,9 +39,11 @@ export default {
       this.points = [];
       const offset = 60; // Distance between points
       const radius = 10;
+      let id = 1;
       for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
           this.points.push({
+            id: id++,
             x: j * offset + 80,
             y: i * offset + 80,
             radius,
@@ -96,10 +98,11 @@ export default {
     },
     // End the pattern drawing
     endPattern() {
+      console.log(this.selectedPoints);
       if (this.isDrawing) {
         this.isDrawing = false;
         this.message = `Pattern: ${this.selectedPoints
-          .map((_, index) => index + 1)
+          .map((point, index) => point.id)
           .join("-")}`;
         setTimeout(this.resetPattern, 1500);
       }
